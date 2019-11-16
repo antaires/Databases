@@ -1,0 +1,54 @@
+DROP TABLE IF EXISTS TopicLike;
+DROP TABLE IF EXISTS PostLike;
+DROP TABLE IF EXISTS Post;
+DROP TABLE IF EXISTS Topic;
+DROP TABLE IF EXISTS Forum;
+DROP TABLE IF EXISTS Person;
+
+CREATE TABLE Person (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR (100) NOT NULL,
+  username VARCHAR (10) NOT NULL UNIQUE,
+  studentId VARCHAR (10) NULL
+);
+
+CREATE TABLE Forum (
+  forumId INTEGER PRIMARY KEY AUTO_INCREMENT,
+  forumTitle VARCHAR (100) NOT NULL UNIQUE
+);
+
+CREATE TABLE Topic (
+  topicId INTEGER PRIMARY KEY AUTO_INCREMENT,
+  topicTitle VARCHAR (100) NOT NULL UNIQUE,
+  forumId INTEGER NOT NULL,
+  timeCreated VARCHAR(30) NOT NULL,
+  lastPostTime VARCHAR(30) NOT NULL,
+  FOREIGN KEY (forumId) REFERENCES Forum(forumId)
+);
+
+CREATE TABLE Post (
+  postId INTEGER PRIMARY KEY AUTO_INCREMENT,
+  authorUsername VARCHAR (10) NOT NULL,
+  postText VARCHAR (2000) NOT NULL,
+  timePosted VARCHAR(30) NOT NULL,
+  topicId INTEGER NOT NULL,
+  postNumberinTopic INTEGER NOT NULL,
+  FOREIGN KEY (topicId) REFERENCES Topic(topicId),
+  FOREIGN KEY (authorUsername) REFERENCES Person(username)
+);
+
+CREATE TABLE PostLike (
+  username VARCHAR (10) NOT NULL,
+  postId INTEGER,
+  FOREIGN KEY (username) REFERENCES Person(username),
+  FOREIGN KEY (postId) REFERENCES Post(postId),
+  PRIMARY KEY (username, postId)
+);
+
+CREATE TABLE TopicLike (
+  username VARCHAR (10) NOT NULL,
+  topicId INTEGER,
+  FOREIGN KEY (username) REFERENCES Person(username),
+  FOREIGN KEY (topicId) REFERENCES Topic(topicId),
+  PRIMARY KEY (username, topicId)
+);
